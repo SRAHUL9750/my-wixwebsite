@@ -111,3 +111,6 @@ footer{text-align:center;padding:40px 5% calc(40px + env(safe-area-inset-bottom)
 .wa-btns{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
 .wa-btns .ghost{background:0;border:1px solid rgba(255,255,255,.2);color:var(--ink);padding:12px 20px;font:500 14px Barlow,sans-serif;cursor:pointer}
 .wa-btns .learn{background:#25d366}
+/* WhatsApp marketing opt-in tick box (unticked by default) */
+.optin{display:flex;gap:10px;align-items:flex-start;font-size:.88rem;color:var(--mut);cursor:pointer;line-height:1.4;margin:2px 0 8px}
+.form .optin input,.wa-ask .optin input{width:18px;height:18px;margin:1px 0 0;padding:0;flex:0 0 auto;accent-color:#25d366}

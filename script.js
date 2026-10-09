@@ -22,13 +22,18 @@ document.querySelectorAll('nav a').forEach(a=>a.onclick=()=>document.body.classL
 document.getElementById('y').textContent=new Date().getFullYear();
 document.addEventListener('click',e=>{const a=e.target.closest('[data-enq]');if(!a)return;e.preventDefault();document.body.classList.remove('open');
 const s=a.dataset.enq;const t=encodeURIComponent(`Hello NTAS, I'd like to enquire about: ${s==='General'?'your IT services':s}. Please contact me.`);
+logEnquiry({source:'WhatsApp button',service:s==='General'?'General enquiry':s},'ntas_wa_'+s,30000);
 window.open(`https://wa.me/${WHATSAPP}?text=${t}`,'_blank','noopener')});
+// Save an enquiry row to the Google Sheet (at most once per `gap` ms for the same key on this device)
+function logEnquiry(d,key,gap){if(!SHEET_URL)return;try{const l=+localStorage.getItem(key)||0;if(Date.now()-l<gap)return;localStorage.setItem(key,Date.now())}catch(_){}
+d.time=new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'});d.page=location.href;
+fetch(SHEET_URL,{method:'POST',mode:'no-cors',keepalive:true,headers:{'Content-Type':'text/plain'},body:JSON.stringify(d)}).catch(()=>{})}
 document.getElementById('f').addEventListener('submit',e=>{e.preventDefault();const f=e.target,d=Object.fromEntries(new FormData(f)),m=document.getElementById('msg');
 if(d.website){f.reset();return} // hidden field: only bots fill it
 const last=+localStorage.getItem('ntas_enq')||0;if(Date.now()-last<60000){m.textContent='Please wait a minute before sending another enquiry.';return}
 try{localStorage.setItem('ntas_enq',Date.now())}catch(_){}
 delete d.website;d.time=new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'});d.page=location.href;
-if(SHEET_URL){fetch(SHEET_URL,{method:'POST',mode:'no-cors',keepalive:true,headers:{'Content-Type':'text/plain'},body:JSON.stringify(d)}).catch(()=>{})} // saved to the Google Sheet
+d.source='Website form';if(SHEET_URL){fetch(SHEET_URL,{method:'POST',mode:'no-cors',keepalive:true,headers:{'Content-Type':'text/plain'},body:JSON.stringify(d)}).catch(()=>{})} // saved to the Google Sheet
 m.textContent='Thanks! Your enquiry is saved. Opening WhatsApp so we can reply quickly…';
 const t=encodeURIComponent(`New enquiry\nName: ${d.name}\nMobile: ${d.mobile}\nService: ${d.service}\nMessage: ${d.message}`);
 window.open(`https://wa.me/${WHATSAPP}?text=${t}`,'_blank','noopener');f.reset()});

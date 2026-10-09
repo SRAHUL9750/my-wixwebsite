@@ -153,7 +153,7 @@ function handleWebhook(d) {
           cache.put('m_' + m.id, '1', 21600);
           var text = m.text ? m.text.body : m.button ? m.button.text : m.interactive ? JSON.stringify(m.interactive).slice(0, 200) : '[' + m.type + ']';
           sh.incoming.appendRow([new Date(+m.timestamp * 1000 || Date.now()), "'+" + m.from, clean(names[m.from], 80), clean(text, 1000), m.type, m.id]);
-          if (/^\s*(stop|unsubscribe)\s*$/i.test(text || '')) markOptOut(m.from);
+          if (/^\s*(stop|stop promotions|unsubscribe)\s*$/i.test(text || "")) markOptOut(m.from);   // typed STOP or the "Stop promotions" button
         });
       });
     });

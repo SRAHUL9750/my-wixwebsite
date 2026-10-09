@@ -1,6 +1,6 @@
 // ===== SETTINGS =====
 const WHATSAPP = "919946662984";           // your number, country code, no +
-const SHEET_URL = "";                       // paste Google Apps Script URL here (see README)
+const SHEET_URL = "https://script.google.com/macros/s/AKfycbwJxYPzSc3kN8ZoprJ1WVC4JJu4poc4ripEc-yrSmursklHu9CK_ro9zP1E_sFopm4/exec"; // Google Apps Script web app that adds rows to the enquiries sheet
 // ====================
 const S=[["🤖","Automation: UiPath & Power Automate","RPA bots, Power Automate flows and Microsoft apps automation that remove repetitive work."],
 ["💻","Custom & Web Apps","Custom web and mobile apps, portals and dashboards built for your process."],

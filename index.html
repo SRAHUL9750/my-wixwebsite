@@ -6,7 +6,7 @@
 <meta name="description" content="UiPath & Power Automate, custom apps, networking, CCTV, IP telephony, servers, cybersecurity and managed IT support in Ernakulam, Kerala.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Semi+Condensed:wght@500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=2">
+<link rel="stylesheet" href="style.css?v=3">
 </head><body>
 <header class="nav" id="nav">
 <a class="logo" href="#home" aria-label="NTAS"><svg viewBox="0 0 40 44" width="34" height="38" fill="none" stroke="#fff" stroke-width="1.6"><path d="M20 2 37 11v22L20 42 3 33V11z"/><path d="M12 32V12l16 20V12"/></svg><span>NTAS</span></a>
@@ -48,4 +48,15 @@
 
 <footer>© <span id="y"></span> NexTechAlign Systems Pvt Ltd · Kochi, India</footer>
 <a class="wa" href="#" data-enq="General" aria-label="WhatsApp">💬</a>
-<script src="script.js?v=2"></script></body></html>
+<dialog id="waAsk" class="wa-ask" aria-labelledby="waAskT">
+<form id="waForm" method="dialog">
+<p class="eyebrow" id="waAskT">CHAT ON WHATSAPP</p>
+<h3 id="waSvc">General enquiry</h3>
+<p class="note">Share your number so we can call you back if WhatsApp doesn't reach us.</p>
+<input name="name" placeholder="Your name (optional)" maxlength="80" autocomplete="name">
+<input name="mobile" type="tel" placeholder="Mobile number" required pattern="[+0-9 ]{10,15}" maxlength="15" autocomplete="tel" inputmode="tel">
+<p class="err" id="waErr" role="alert"></p>
+<div class="wa-btns"><button type="button" class="ghost" id="waCancel">Cancel</button><button type="submit" class="learn">Continue to WhatsApp</button></div>
+</form>
+</dialog>
+<script src="script.js?v=3"></script></body></html>

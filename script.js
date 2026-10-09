@@ -20,10 +20,22 @@ S.forEach(s=>{const t=document.createElement('div');t.className='tile';t.innerHT
 new IntersectionObserver((e,o)=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');o.unobserve(x.target)}}),{threshold:.1}).observe&&document.querySelectorAll('.tile').forEach(t=>{const o=new IntersectionObserver(([x])=>{if(x.isIntersecting){t.classList.add('in');o.disconnect()}},{threshold:.1});o.observe(t)});
 document.querySelectorAll('nav a').forEach(a=>a.onclick=()=>document.body.classList.remove('open'));
 document.getElementById('y').textContent=new Date().getFullYear();
+// WhatsApp tiles/button: ask for the visitor's mobile number first, save it, then open WhatsApp
+const waAsk=document.getElementById('waAsk'),waForm=document.getElementById('waForm');let waService='General enquiry';
 document.addEventListener('click',e=>{const a=e.target.closest('[data-enq]');if(!a)return;e.preventDefault();document.body.classList.remove('open');
-const s=a.dataset.enq;const t=encodeURIComponent(`Hello NTAS, I'd like to enquire about: ${s==='General'?'your IT services':s}. Please contact me.`);
-logEnquiry({source:'WhatsApp button',service:s==='General'?'General enquiry':s},'ntas_wa_'+s,30000);
-window.open(`https://wa.me/${WHATSAPP}?text=${t}`,'_blank','noopener')});
+waService=a.dataset.enq==='General'?'General enquiry':a.dataset.enq;document.getElementById('waSvc').textContent=waService;document.getElementById('waErr').textContent='';
+try{const me=JSON.parse(localStorage.getItem('ntas_me')||'{}');waForm.name.value=me.name||'';waForm.mobile.value=me.mobile||''}catch(_){}
+if(waAsk.showModal){waAsk.showModal();setTimeout(()=>(waForm.mobile.value?waForm.querySelector('[type=submit]'):waForm.mobile).focus(),50)}else{openWhatsApp('','')}});
+document.getElementById('waCancel').onclick=()=>waAsk.close();
+waAsk.addEventListener('click',e=>{if(e.target===waAsk)waAsk.close()}); // tap outside closes
+waForm.addEventListener('submit',e=>{e.preventDefault();const name=waForm.name.value.trim(),mobile=waForm.mobile.value.trim();
+if(!/^[+0-9 ]{10,15}$/.test(mobile)){document.getElementById('waErr').textContent='Please enter a valid mobile number (10 digits).';waForm.mobile.focus();return}
+try{localStorage.setItem('ntas_me',JSON.stringify({name,mobile}))}catch(_){}
+waAsk.close();openWhatsApp(name,mobile)});
+function openWhatsApp(name,mobile){
+logEnquiry({source:'WhatsApp button',service:waService,name,mobile},'ntas_wa_'+waService+mobile,30000);
+const t=encodeURIComponent(`Hello NTAS, I'd like to enquire about: ${waService==='General enquiry'?'your IT services':waService}.${name?`\nName: ${name}`:''}${mobile?`\nMobile: ${mobile}`:''}\nPlease contact me.`);
+window.open(`https://wa.me/${WHATSAPP}?text=${t}`,'_blank','noopener')}
 // Save an enquiry row to the Google Sheet (at most once per `gap` ms for the same key on this device)
 function logEnquiry(d,key,gap){if(!SHEET_URL)return;try{const l=+localStorage.getItem(key)||0;if(Date.now()-l<gap)return;localStorage.setItem(key,Date.now())}catch(_){}
 d.time=new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'});d.page=location.href;
